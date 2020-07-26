@@ -6,9 +6,13 @@ from efemerides import efemerides
 from calendar import monthrange
 from user_info import users
 from functools import wraps
+from flask_caching import Cache
 
+
+cache = Cache(config={'CACHE_TYPE': 'simple'})
 
 app = Flask(__name__)
+cache.init_app(app)
 
 # Avoid values reordering in JSON data
 app.config['JSON_SORT_KEYS'] = False
@@ -32,7 +36,7 @@ def tokenRequired(function):
             #print(user_data)
             current_user = [user for user in users if user["username"]==user_data['user']]
         except:
-            return jsonify({"message": "Invalid token"})
+            return jsonify({"message": "Invalid token"}),401
         
         return function(current_user[0], *args, **kwargs)
     return decorated
@@ -52,7 +56,7 @@ def login():
         current_user = [user for user in users if user["username"]==username]
         if  len(current_user) > 0 and password == current_user[0].get("password"):
             # Creates token for requests
-            token = jwt.encode({'user': username, 'exp':datetime.utcnow() + timedelta(minutes=30)}, app.config['SECRET_KEY'])
+            token = jwt.encode({'user': username, 'exp':datetime.utcnow() + timedelta(minutes=5)}, app.config['SECRET_KEY'])
             return jsonify({'token': token.decode('UTF-8')})
 
     # Notifies the browser that authentication is required
@@ -80,6 +84,8 @@ def getEfemerides(current_user):
 
 
 # NOTE: Eventually, this would be a database query
+#@cache.cached(timeout=30, key_prefix='entry')
+@cache.memoize(timeout=60)
 def getEntry(date):
     # Format day and month as zero-padded string
     day = "{:02d}".format(date.day)
