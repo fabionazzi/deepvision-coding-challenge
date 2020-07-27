@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+
+    # Define individual services
+
+    flask:
+        # Build flask service using Dockerfile in the flask directory
+        build: ./api
+        # Give a name to the container
+        container_name: deepvision-challenge-api
+        # Instruct Docker to always restart the service
+        restart: always
+        # Set environment variables
+        environment: 
+            - APP_NAME=MyFlaskApp
+        # Expose ports for internal connections
+        expose:
+            - 8080
+
+    nginx:
+        build: ./server
+        container_name: nginx-server
+        restart: always
+        # Mapping ports between the host and the container HOST:CONTAINER
+        ports: 
+            - "80:80"

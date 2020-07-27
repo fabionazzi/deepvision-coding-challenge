@@ -1,22 +1,12 @@
-from flask import Flask, request, jsonify, make_response
+from app import app, cache
+from flask import request, jsonify, make_response
+from functools import wraps
 import jwt
 from werkzeug import exceptions
 from datetime import datetime, timedelta
-from efemerides import efemerides
 from calendar import monthrange
-from user_info import users
-from functools import wraps
-from flask_caching import Cache
-
-
-cache = Cache(config={'CACHE_TYPE': 'simple'})
-
-app = Flask(__name__)
-cache.init_app(app)
-
-# Avoid values reordering in JSON data
-app.config['JSON_SORT_KEYS'] = False
-app.config['SECRET_KEY'] = "secret"
+from app.efemerides import efemerides
+from app.user_info import users
 
 
 def tokenRequired(function):
@@ -102,14 +92,9 @@ def getEntry(date):
 
 @app.errorhandler(exceptions.BadRequest)
 def handleInvalidQuery(error):
-    return jsonify({"message":"Queries must be in format 'YYYY:MM:DD'\
-        and must include valid dates"}),400
+    return jsonify({"message":"Queries must be in format 'YYYY:MM:DD' and must include valid dates"}),400
 
 
 @app.errorhandler(exceptions.MethodNotAllowed)
 def handleMethodNotAllowed(error):
     return jsonify({"message":"Only GET method is accepted"}),405
-
-
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)
