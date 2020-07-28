@@ -12,24 +12,23 @@ Clonar el repositorio
 
 ### Cómo ejecutar el servicio
 
-Para la construcción del proyecto:
-
+Ubicarse en el directorio donde se encuentra el proyecto clonado:  
 ```cd /deepvision-coding-challenge```
+
+Para construir e proyecto, ejecutar el siguiente comando:  
 ```docker-compose build```
 
-Para ejecutar la solución:
-
+Para ejecutar la solución:  
 ```docker-compose up```
 
 
 ### Ejecución de la aplicación
-1. Desde una aplicación (e.g Insomnia o Postman) realizar una solicitud: 
-
+1. Desde una aplicación (e.g Insomnia o Postman) realizar una solicitud:  
 ```GET localhost/login```
 
 que incluya en la cabecera HTTP un campo __Authorization: Basic__ con las credenciales 
 
-```user: user1```
+```user: user1```  
 ```password: pass1```
 
 La API responderá con un token que se utilizará para auntenticar las siguientes peticiones.
