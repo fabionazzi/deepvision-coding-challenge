@@ -15,6 +15,7 @@ Clonar el repositorio
 Para la construcción del proyecto:
 
 ```cd /deepvision-coding-challenge```
+
 ```docker-compose build```
 
 Para ejecutar la solución:
@@ -30,6 +31,7 @@ Para ejecutar la solución:
 que incluya en la cabecera HTTP un campo __Authorization: Basic__ con las credenciales 
 
 ```user: user1```
+
 ```password: pass1```
 
 La API responderá con un token que se utilizará para auntenticar las siguientes peticiones.
