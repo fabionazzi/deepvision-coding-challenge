@@ -21,9 +21,7 @@ def tokenRequired(function):
             return jsonify({"message": "Token is missing"}), 401
         
         try:
-            print(token)
             user_data = jwt.decode(token, app.config['SECRET_KEY'])
-            #print(user_data)
             current_user = [user for user in users if user["username"]==user_data['user']]
         except:
             return jsonify({"message": "Invalid token"}),401
@@ -34,9 +32,9 @@ def tokenRequired(function):
 
 @app.route("/login")
 def login():
-    """ This function is intended to get an authentication token to access 
-    protected routes """
-
+    """ 
+    Returns an authentication token to access protected routes 
+    """
     auth = request.authorization 
     if auth is not None:
         username = auth.username
@@ -56,25 +54,25 @@ def login():
 @app.route("/efemerides", methods=['GET'])
 @tokenRequired
 def getEfemerides(current_user):
+    """
+    Returns the event of the requested day and all the events of that month
+    """
     # Get query string from URL
-    queryDay = request.args.get('day')
+    query_date = request.args.get('day')
     
     # Check format for input data. It must be: YYYY-MM-DD
     try:
-        # FIXME: Python 3.6 bug: It doesn't return zero-padded months and days, 
-        # as it should be
-        date = datetime.strptime(queryDay, "%Y-%m-%d")    
+        date = datetime.strptime(query_date, "%Y-%m-%d")    
     except ValueError:
-        raise exceptions.BadRequest
+        return jsonify({"message":"Queries must be in format 'YYYY:MM:DD' and must include valid dates"}),400
     except TypeError:
-         raise exceptions.BadRequest
+        return jsonify({"message":"Query arguments not recognized"}),400
     else:
         event = getEntry(date)
         return jsonify(event), 200
 
 
 # NOTE: Eventually, this would be a database query
-#@cache.cached(timeout=30, key_prefix='entry')
 @cache.memoize(timeout=60)
 def getEntry(date):
     # Format day and month as zero-padded string
@@ -88,11 +86,6 @@ def getEntry(date):
         }
     event = {day:efemerides.get(month).get(day), month:month_events}
     return event
-
-
-@app.errorhandler(exceptions.BadRequest)
-def handleInvalidQuery(error):
-    return jsonify({"message":"Queries must be in format 'YYYY:MM:DD' and must include valid dates"}),400
 
 
 @app.errorhandler(exceptions.MethodNotAllowed)
