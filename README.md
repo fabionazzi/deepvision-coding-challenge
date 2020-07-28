@@ -1,45 +1,50 @@
-### API para consulta de efemérides
+## API para consulta de efemérides
 Se provee una API con autenticación para la consulta de efemérides.
 La aplicación se despliega sobre un servidor self-hosted _nginx_.
 
 
-##### Obtención del proyecto
+### Obtención del proyecto
 
 Clonar el repositorio
 
-<git clone https://github.com/fabionazzi/deepvision-coding-challenge.git>
+```git clone https://github.com/fabionazzi/deepvision-coding-challenge.git>```
 
 
-##### Cómo ejecutar el servicio
+### Cómo ejecutar el servicio
 
 Para la construcción del proyecto:
 
-<cd /deepvision-coding-challenge>
-<docker-compose build>
+```cd /deepvision-coding-challenge```
+```docker-compose build```
 
 Para ejecutar la solución:
 
-<docker-compose up>
+```docker-compose up```
 
 
-##### Ejecución de la aplicación
+### Ejecución de la aplicación
 1. Desde una aplicación (e.g Insomnia o Postman) realizar una solicitud: 
 
-> GET localhost/login
+```GET localhost/login```
 
 que incluya en la cabecera HTTP un campo __Authorization: Basic__ con las credenciales 
 
-> user: user1
-> password: pass1
+```user: user1```
+```password: pass1```
 
 La API responderá con un token que se utilizará para auntenticar las siguientes peticiones.
 
 2. Para consultar las efemérides de un determinado día, realizar una petición
-> GET localhost/efemerides?day=YYYY:MM:DD.
+
+```GET localhost/efemerides?day=YYYY:MM:DD```
+
 que incluya en la cabecera HTTP un campo __x-access-token__ cuyo valor
 será el token devuelto en el paso anterior.
 
-##### Casos de prueba
+
+
+### Casos de prueba
 
 Para correr el _test suite_, ubicarse en el directorio clonado y ejecutar:
-<py.test>
+
+```py.test```
