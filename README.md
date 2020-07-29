@@ -26,22 +26,27 @@ Para ejecutar la solución:
 
 
 ### Ejecución de la aplicación
-1. Desde una aplicación (e.g Insomnia o Postman) realizar una solicitud:  
+1. Desde un navegador acceder a la documentación interactiva de la API en: 
 
-```GET localhost/login```
+```localhost/docs```
 
-que incluya en la cabecera HTTP un campo __Authorization: Basic__ con las credenciales: 
+Antes de realizar cualquier operación sobre la API, es necesario
+autenticarse utilizando las credenciales: 
 
 ```user: user1```  
 ```password: pass1```
 
+2. Realizar una petición:
+
+```GET localhost/login```
+
 La API responderá con un token que se utilizará para auntenticar las siguientes peticiones.
 
-2. Para consultar las efemérides de un determinado día, realizar una petición
+3. Para consultar las efemérides de un determinado día, realizar una petición:
 
-```GET localhost/efemerides?day=YYYY:MM:DD```
+```GET localhost/efemerides```
 
-que incluya en la cabecera HTTP un campo __x-access-token__ cuyo valor
+que incluya la consulta en formato _YYYY:MM:DD_ y la cabecera HTTP un campo _x-access-token_ cuyo valor
 será el token devuelto en el paso anterior.
 
 

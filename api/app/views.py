@@ -7,7 +7,23 @@ from datetime import datetime, timedelta
 from calendar import monthrange
 from app.efemerides import efemerides
 from app.user_info import users
+# from flasgger import Swagger
+# from flasgger.utils import swag_from
+from flask_swagger_ui import get_swaggerui_blueprint
 
+# Swagger(app)
+### swagger specific ###
+SWAGGER_URL = '/docs'
+API_URL = '/static/openapi.json'
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "Efemerides-API"
+    }
+)
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+### end swagger specific ###
 
 def tokenRequired(function):
     @wraps(function)
@@ -31,11 +47,10 @@ def tokenRequired(function):
 
 
 @app.route("/login")
+# @swag_from('login.yml')
 def login():
-    """ 
-    Returns an authentication token to access protected routes 
-    """
-    auth = request.authorization 
+
+    auth = request.authorization
     if auth is not None:
         username = auth.username
         password = auth.password
@@ -45,7 +60,7 @@ def login():
         if  len(current_user) > 0 and password == current_user[0].get("password"):
             # Creates token for requests
             token = jwt.encode({'user': username, 'exp':datetime.utcnow() + timedelta(minutes=5)}, app.config['SECRET_KEY'])
-            return jsonify({'token': token.decode('UTF-8')})
+            return jsonify({'token': token.decode('UTF-8')}),200
 
     # Notifies the browser that authentication is required
     return make_response("User not registered", 401, {"WWW-Authenticate": "Basic realm='Login Required'"})
@@ -53,10 +68,8 @@ def login():
 
 @app.route("/efemerides", methods=['GET'])
 @tokenRequired
+# @swag_from('efemerides.yml')
 def getEfemerides(current_user):
-    """
-    Returns the event of the requested day and all the events of that month
-    """
     # Get query string from URL
     query_date = request.args.get('day')
     

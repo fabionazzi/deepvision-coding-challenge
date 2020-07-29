@@ -1,0 +1,82 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "description": "API for event request",
+      "version": "1.0.0",
+      "title": "Efemerides-API"
+    },
+    "servers": [
+      {
+        "url": "/"
+      }
+    ],
+    "components":{
+      "securitySchemes":{
+        "BasicAuth":{
+          "type":"http",
+          "scheme":"basic"
+        }
+      }
+    },
+    "paths": {
+      "/login": {
+        "get": {
+          "tags": [
+            "Login"
+          ],
+          "summary": "Returns token for authentication",
+          "security":[
+            {
+              "BasicAuth":[]
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "401": {
+              "description": "User not registered"
+            }
+          }
+        }
+      },
+      "/efemerides": {
+        "get": {
+          "tags": [
+            "Efemerides"
+          ],
+          "summary":"Returns a JSON object with the events of the requested date",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "day",
+              "schema": {
+                "type": "string",
+                "format":"date"
+              },
+              "required": true
+            },
+            {
+              "in": "header",
+              "name": "x-access-token",
+              "schema": {
+                "type": "string"
+              },
+              "required": true
+            }
+        ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "Invalid argument or format"
+            },
+            "401": {
+              "description": "Need a valid token"
+            }
+          }
+        }
+      }
+    }
+}
