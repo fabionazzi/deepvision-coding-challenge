@@ -5,7 +5,7 @@ Flask-Caching==1.9.0
 flask-swagger-ui==3.25.0
 importlib-metadata==1.7.0
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 jsonschema==3.2.0
 MarkupSafe==1.1.1
 mistune==0.8.4
