@@ -8,7 +8,7 @@ itsdangerous==1.1.0
 Jinja2==2.11.2
 jsonschema==3.2.0
 MarkupSafe==1.1.1
-mistune==0.8.4
+mistune==2.0.3
 #pkg-resources==0.0.0
 PyJWT==1.7.1
 pyrsistent==0.16.0
